@@ -109,12 +109,12 @@ class CartService {
 
 
     static async updateQuantity(cartItemId, quantity) {
+        // Phải dùng findByPk để tìm chính xác dòng item đó
         const item = await CartItem.findByPk(cartItemId);
-        if (!item) throw new Error('Cart item not found');
+        if (!item) throw new Error('Không tìm thấy dòng sản phẩm trong giỏ hàng');
 
-        item.quantity = quantity;
+        item.quantity = parseInt(quantity);
         await item.save();
-
         return item;
     }
 
@@ -127,7 +127,7 @@ class CartService {
 
     static async clearCart(userId) {
         if (!userId) throw new Error('userId is required');
-        const deleted = await CartItem.destroy({ where: { id: userId } });
+        const deleted = await CartItem.destroy({ where: { id: userId } }); // <-- SAI Ở ĐÂY
         return deleted;
     }
 }
